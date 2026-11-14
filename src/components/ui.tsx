@@ -1,5 +1,6 @@
 "use client";
 import { ReactNode, useEffect, useRef, useId } from "react";
+import { createPortal } from "react-dom";
 import { X, Loader2, LucideIcon } from "lucide-react";
 
 export function Modal({ open, onClose, title, children, wide }: { open: boolean; onClose: () => void; title: string; children: ReactNode; wide?: boolean }) {
@@ -24,7 +25,7 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
     return () => {cancelAnimationFrame(frame);document.body.style.overflow=prev;document.removeEventListener("keydown",key);before?.focus();};
   }, [open, onClose]);
   if (!open) return null;
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-0 sm:p-4">
       <div className="absolute inset-0 bg-[#20242B]/45 anim-fade-in" onClick={onClose} />
       <div role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} ref={dialogRef} className={`outline-none anim-pop relative bg-surface w-full ${wide ? "sm:max-w-2xl" : "sm:max-w-lg"} max-h-[92vh] overflow-y-auto rounded-t-xl sm:rounded-lg border border-border shadow-[0_8px_30px_rgba(20,24,33,.18)]`}>
@@ -34,7 +35,7 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
         </div>
         <div className="p-5">{children}</div>
       </div>
-    </div>
+    </div>, document.body
   );
 }
 

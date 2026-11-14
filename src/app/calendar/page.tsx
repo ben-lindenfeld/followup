@@ -33,7 +33,7 @@ export default function CalendarPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); if(window.matchMedia("(max-width: 767px)").matches)setView("week"); }, [load]);
   useEffect(() => { const h = () => load(); window.addEventListener("followup:data-changed", h); return () => window.removeEventListener("followup:data-changed", h); }, [load]);
 
   const filtered = useMemo(() => tasks.filter((t) => {

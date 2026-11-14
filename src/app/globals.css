@@ -31,8 +31,8 @@ body { background: var(--color-bg); color: var(--color-ink); font-feature-settin
 @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(.985); } to { opacity: 1; transform: none; } }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
-.anim-page { animation: pageIn .18s ease-out both; }
-.anim-fade-up { animation: pageIn .18s ease-out both; }
+.anim-page { animation: pageIn .18s ease-out backwards; }
+.anim-fade-up { animation: pageIn .18s ease-out backwards; }
 .anim-fade-in { animation: fadeIn .15s ease-out both; }
 .anim-pop { animation: popIn .18s ease-out both; }
 
