@@ -50,7 +50,7 @@ export default function CustomersPage() {
         <button className="btn btn-primary text-sm" onClick={() => setModal({ open: true, customer: null })}><Plus size={15} /> הוסף לקוח</button>
       </PageHeader>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="filter-bar gap-2 mb-4">
         <div className="relative flex-1 min-w-[200px]">
           <Search size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
           <input className="input input-icon" placeholder="חיפוש לפי שם, טלפון, שירות..." value={q} onChange={(e) => setQ(e.target.value)} />

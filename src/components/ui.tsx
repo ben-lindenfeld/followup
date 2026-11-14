@@ -115,7 +115,7 @@ export function PageHeader({ title, sub, children }: { title: string; sub?: stri
         <h1 className="text-lg font-bold">{title}</h1>
         {sub && <div className="text-[13px] text-muted mt-0.5">{sub}</div>}
       </div>
-      {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
+      {children && <div className="page-actions">{children}</div>}
     </div>
   );
 }

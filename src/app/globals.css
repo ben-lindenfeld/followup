@@ -112,3 +112,9 @@ tbody tr { transition: background-color .1s; }
 ::-webkit-scrollbar-thumb:hover { background: #B9BBB5; }
 
 @media(max-width:767px){ .mobile-safe-nav{padding-bottom:max(4px,env(safe-area-inset-bottom));} .mobile-actions button{min-width:36px;min-height:36px;} }
+
+/* Keep filters compact without relying on intrinsic input widths. */
+.filter-bar {display:grid;grid-template-columns:minmax(0,1fr) max-content max-content;align-items:center;}
+.filter-bar > .relative {min-width:0;}
+.page-actions {display:grid;grid-auto-flow:column;grid-auto-columns:max-content;align-items:center;gap:8px;max-width:100%;}
+@media(max-width:767px){.filter-bar{grid-template-columns:1fr max-content;}.filter-bar>.relative{grid-column:1/-1;}.filter-bar>select{justify-self:start;}}
