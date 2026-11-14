@@ -23,7 +23,7 @@ export function Modal({ open, onClose, title, children, wide }: { open: boolean;
     };
     document.addEventListener("keydown", key);
     return () => {cancelAnimationFrame(frame);document.body.style.overflow=prev;document.removeEventListener("keydown",key);before?.focus();};
-  }, [open, onClose]);
+  }, [open]);
   if (!open) return null;
   return createPortal(
     <div className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-0 sm:p-4">
