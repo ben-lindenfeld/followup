@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "מערכת CRM פשוטה וחכמה לבעלי עסקים קטנים",
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#4F46E5" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#232A4B" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

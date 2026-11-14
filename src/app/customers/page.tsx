@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Search, Pencil, Trash2, Users } from "lucide-react";
-import { PageHeader, Spinner, Badge, SampleBadge, EmptyState, Modal } from "@/components/ui";
+import { PageSkeleton, PageHeader, Spinner, Badge, SampleBadge, EmptyState, Modal } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import CustomerModal from "@/components/CustomerModal";
 import { Customer, customerStatusLabel, formatDate } from "@/lib/types";
@@ -21,7 +21,7 @@ export default function CustomersPage() {
   const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
-    try { setCustomers(await fetchCustomers()); } catch (e) { console.error(e); toast("טעינה נכשלה", "error"); }
+    try { setCustomers(await fetchCustomers()); } catch (e) { console.error(e); toast("לא הצלחנו לטעון את הנתונים. רענן את העמוד ונסה שוב.", "error"); }
     setLoading(false);
   }, [toast]);
 
@@ -42,7 +42,7 @@ export default function CustomersPage() {
     });
   }, [customers, q, status, sortDesc]);
 
-  if (loading) return <Spinner />;
+  if (loading) return <PageSkeleton />;
 
   return (
     <div className="anim-fade-up">
@@ -69,28 +69,28 @@ export default function CustomersPage() {
       {filtered.length === 0 ? (
         <div className="card"><EmptyState icon={Users} title={q || status ? "לא נמצאו לקוחות" : "עוד אין לקוחות"} sub={q || status ? "נסה חיפוש אחר" : "הוסף את הלקוח הראשון שלך"} action={<button className="btn btn-primary text-sm" onClick={() => setModal({ open: true, customer: null })}><Plus size={15} /> הוסף לקוח</button>} /></div>
       ) : (
-        <div className="card overflow-x-auto">
-          <table className="w-full min-w-[760px]">
+        <><div className="md:hidden card divide-y divide-border">{filtered.map(c=><div key={c.id} className="px-3 py-3" onClick={()=>router.push(`/customer?id=${c.id}`)}><div className="flex items-center gap-2"><span className="font-medium flex-1">{c.full_name}</span>{c.is_sample&&<SampleBadge/>}<Badge label={customerStatusLabel(c.status).label} color={customerStatusLabel(c.status).color} bg={customerStatusLabel(c.status).bg}/></div><div className="flex items-center justify-between gap-2 mt-1.5"><div className="text-xs text-muted"><span dir="ltr" className="inline-block">{c.phone||"ללא טלפון"}</span><div>{c.service_type||""}{c.next_follow_up?` · חזרה: ${formatDate(c.next_follow_up)}`:""}</div></div><div className="flex mobile-actions" onClick={e=>e.stopPropagation()}><button title="עריכת לקוח" className="btn btn-ghost !p-2" onClick={()=>setModal({open:true,customer:c})}><Pencil size={15}/></button><button title="מחיקת לקוח" className="btn btn-ghost !p-2 hover:text-danger" onClick={()=>setToDelete(c)}><Trash2 size={15}/></button></div></div></div>)}</div><div className="hidden md:block card overflow-x-auto">
+          <table className="w-full md:min-w-[760px]">
             <thead>
-              <tr className="bg-slate-50">
-                <th className="th">שם</th><th className="th">טלפון</th><th className="th">אימייל</th><th className="th">סוג שירות</th><th className="th">סטטוס</th><th className="th">פנייה אחרונה</th><th className="th">חזרה הבאה</th><th className="th"></th>
+              <tr className="bg-bg">
+                <th className="th">שם</th><th className="th">טלפון</th><th className="th hidden md:table-cell">אימייל</th><th className="th hidden md:table-cell">סוג שירות</th><th className="th">סטטוס</th><th className="th hidden lg:table-cell">פנייה אחרונה</th><th className="th hidden lg:table-cell">חזרה הבאה</th><th className="th"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50 cursor-pointer" onClick={() => router.push(`/customer?id=${c.id}`)}>
+                <tr key={c.id} className="hover:bg-[#FAFAF8] cursor-pointer" onClick={() => router.push(`/customer?id=${c.id}`)}>
                   <td className="td font-medium">
                     <span className="flex items-center gap-2">{c.full_name} {c.is_sample && <SampleBadge />}</span>
                   </td>
-                  <td className="td" dir="ltr">{c.phone ?? "—"}</td>
-                  <td className="td text-muted" dir="ltr">{c.email ?? "—"}</td>
-                  <td className="td">{c.service_type ?? "—"}</td>
+                  <td className="td" dir="ltr">{c.phone ?? "-"}</td>
+                  <td className="td text-muted hidden md:table-cell" dir="ltr">{c.email ?? "-"}</td>
+                  <td className="td hidden md:table-cell">{c.service_type ?? "-"}</td>
                   <td className="td"><Badge label={customerStatusLabel(c.status).label} color={customerStatusLabel(c.status).color} bg={customerStatusLabel(c.status).bg} /></td>
-                  <td className="td text-muted">{formatDate(c.last_contact_at)}</td>
-                  <td className="td text-muted">{formatDate(c.next_follow_up)}</td>
+                  <td className="td text-muted hidden lg:table-cell">{formatDate(c.last_contact_at)}</td>
+                  <td className="td text-muted hidden lg:table-cell">{formatDate(c.next_follow_up)}</td>
                   <td className="td" onClick={(e) => e.stopPropagation()}>
                     <div className="flex gap-1">
-                      <button className="p-1.5 rounded-lg hover:bg-slate-100 text-muted" onClick={() => setModal({ open: true, customer: c })}><Pencil size={15} /></button>
+                      <button className="p-1.5 rounded-lg hover:bg-[#EEEFEC] text-muted" onClick={() => setModal({ open: true, customer: c })}><Pencil size={15} /></button>
                       <button className="p-1.5 rounded-lg hover:bg-danger-soft text-muted hover:text-danger" onClick={() => setToDelete(c)}><Trash2 size={15} /></button>
                     </div>
                   </td>
@@ -98,7 +98,7 @@ export default function CustomersPage() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div></>
       )}
 
       <CustomerModal open={modal.open} customer={modal.customer} onClose={() => setModal({ open: false, customer: null })} onSaved={() => { setModal({ open: false, customer: null }); load(); }} />
@@ -110,7 +110,7 @@ export default function CustomersPage() {
           <button className="btn btn-danger-soft" disabled={deleting} onClick={async () => {
             setDeleting(true);
             try { await deleteCustomer(toDelete!.id, toDelete!.full_name); toast("הלקוח נמחק"); setToDelete(null); load(); }
-            catch { toast("מחיקה נכשלה", "error"); }
+            catch { toast("המחיקה לא הצליחה. הנתונים לא נמחקו, נסה שוב.", "error"); }
             setDeleting(false);
           }}>{deleting ? "מוחק..." : "מחק לקוח"}</button>
           <button className="btn btn-ghost" onClick={() => setToDelete(null)}>ביטול</button>

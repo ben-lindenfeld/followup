@@ -2,7 +2,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Phone, Mail, MapPin, Pencil, Plus, ArrowRight, StickyNote, Inbox, CheckSquare, History } from "lucide-react";
-import { Spinner, Badge, SampleBadge } from "@/components/ui";
+import { Spinner, PageSkeleton, Badge, SampleBadge } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import CustomerModal from "@/components/CustomerModal";
 import LeadModal from "@/components/LeadModal";
@@ -22,15 +22,20 @@ function CustomerProfileInner() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activity, setActivity] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError,setLoadError]=useState(false);
+  const [busyId,setBusyId]=useState<string|null>(null);
   const [newNote, setNewNote] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [leadOpen, setLeadOpen] = useState(false);
   const [taskOpen, setTaskOpen] = useState(false);
 
   const load = useCallback(async () => {
-    if (!id) return;
+    if (!id) {router.replace("/customers");return;}
+    setLoadError(false);
+    try {
     const sb = getSupabase();
-    const { data: c } = await sb.from("customers").select("*").eq("id", id).maybeSingle();
+    const { data: c, error: customerError } = await sb.from("customers").select("*").eq("id", id).maybeSingle();
+    if(customerError)throw customerError;
     if (!c) { router.replace("/customers"); return; }
     setCustomer(c);
     const [{ data: l }, n, t, { data: a }] = await Promise.all([
@@ -40,13 +45,16 @@ function CustomerProfileInner() {
       sb.from("activity_logs").select("*").eq("customer_id", id).order("created_at", { ascending: false }).limit(20),
     ]);
     setLeads(l ?? []); setNotes(n); setTasks(t.filter((x) => x.customer_id === id)); setActivity(a ?? []);
+    }catch{setLoadError(true);}
     setLoading(false);
   }, [id, router]);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => { const h = () => load(); window.addEventListener("followup:data-changed", h); return () => window.removeEventListener("followup:data-changed", h); }, [load]);
 
-  if (loading) return <Spinner />;
+  const saveNote=async()=>{if(!customer||!newNote.trim()||busyId)return;setBusyId("note");try{await addNote(customer.id,newNote.trim());setNewNote("");await load();toast("ההערה נשמרה");}catch{toast("ההערה לא נשמרה. נסה שוב.","error");}finally{setBusyId(null);}};
+  if (loading) return <PageSkeleton />;
+  if(loadError)return <div className="card p-5 text-sm">לא הצלחנו לטעון את פרטי הלקוח. <button className="btn btn-outline" onClick={()=>load()}>נסה שוב</button></div>;
   if (!customer) return null;
 
   const status = customerStatusLabel(customer.status);
@@ -58,9 +66,9 @@ function CustomerProfileInner() {
       <div className="card p-5 mb-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-primary-soft text-primary flex items-center justify-center font-bold text-lg">{customer.full_name[0]}</div>
+            <div className="w-12 h-12 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-bold text-lg">{customer.full_name[0]}</div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h1 className="font-bold text-lg">{customer.full_name}</h1>
                 {customer.is_sample && <SampleBadge />}
                 <Badge label={status.label} color={status.color} bg={status.bg} />
@@ -88,7 +96,7 @@ function CustomerProfileInner() {
           {leads.length === 0 && <div className="text-sm text-muted">אין פניות עדיין</div>}
           <div className="flex flex-col gap-2">
             {leads.map((l) => (
-              <div key={l.id} className="p-3 rounded-xl bg-slate-50 border border-border">
+              <div key={l.id} className="p-3 rounded-lg bg-bg border border-border">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium">{l.title}</span>
                   <Badge label={leadStatusLabel(l.status).label} color={leadStatusLabel(l.status).color} bg={leadStatusLabel(l.status).bg} />
@@ -108,8 +116,8 @@ function CustomerProfileInner() {
           {tasks.length === 0 && <div className="text-sm text-muted">אין משימות פתוחות</div>}
           <div className="flex flex-col gap-2">
             {tasks.map((t) => (
-              <div key={t.id} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-border">
-                <button className="w-5 h-5 rounded-md border-2 border-slate-300 hover:border-success hover:bg-success-soft shrink-0" title="סמן כהושלם" onClick={async () => { await completeTask(t.id, t.title, t.customer_id); toast("המשימה הושלמה"); load(); }} />
+              <div key={t.id} className="flex items-center gap-3 p-3 rounded-lg bg-bg border border-border">
+                <button className="w-5 h-5 rounded-md border-2 border-[#C9CCD2] hover:border-success hover:bg-success-soft shrink-0" title="סמן כהושלם" disabled={busyId===t.id} onClick={async () => {setBusyId(t.id);try{await completeTask(t.id, t.title, t.customer_id);toast("המשימה הושלמה");await load();}catch{toast("המשימה לא סומנה. נסה שוב.","error");}finally{setBusyId(null);}}} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">{t.title}</div>
                   <div className="text-xs text-muted">{formatDateTime(t.due_at)}</div>
@@ -124,13 +132,13 @@ function CustomerProfileInner() {
           <h2 className="font-semibold flex items-center gap-2 mb-3"><StickyNote size={16} className="text-primary" /> הערות</h2>
           <div className="flex gap-2 mb-3">
             <input className="input" placeholder="הוסף הערה..." value={newNote} onChange={(e) => setNewNote(e.target.value)} onKeyDown={async (e) => {
-              if (e.key === "Enter" && newNote.trim()) { await addNote(customer.id, newNote.trim()); setNewNote(""); load(); }
+              if (e.key === "Enter") saveNote();
             }} />
-            <button className="btn btn-primary shrink-0" onClick={async () => { if (newNote.trim()) { await addNote(customer.id, newNote.trim()); setNewNote(""); load(); } }}><Plus size={15} /></button>
+            <button className="btn btn-primary shrink-0" aria-label="שמור הערה" disabled={busyId==="note"} onClick={saveNote}><Plus size={15} /></button>
           </div>
           <div className="flex flex-col gap-2">
             {notes.map((n) => (
-              <div key={n.id} className="p-3 rounded-xl bg-warning-soft/60 border border-warning/20 text-sm">
+              <div key={n.id} className="p-3 rounded-lg bg-warning-soft/60 border border-warning/20 text-sm">
                 <div className="leading-relaxed">{n.body}</div>
                 <div className="text-xs text-muted mt-1">{timeAgo(n.created_at)}</div>
               </div>

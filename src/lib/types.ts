@@ -90,12 +90,12 @@ export interface ActivityLog {
 }
 
 export const LEAD_STATUSES: { key: LeadStatus; label: string; color: string; bg: string }[] = [
-  { key: "new", label: "חדשה", color: "#4F46E5", bg: "#EEF2FF" },
-  { key: "waiting", label: "ממתינה לתשובה", color: "#F59E0B", bg: "#FEF3C7" },
-  { key: "in_progress", label: "בטיפול", color: "#0EA5E9", bg: "#E0F2FE" },
-  { key: "quote_sent", label: "נשלחה הצעת מחיר", color: "#8B5CF6", bg: "#EDE9FE" },
-  { key: "closed_won", label: "נסגרה בהצלחה", color: "#16A34A", bg: "#DCFCE7" },
-  { key: "irrelevant", label: "לא רלוונטית", color: "#64748B", bg: "#F1F5F9" },
+  { key: "new", label: "חדשה", color: "#3D4FC4", bg: "#ECEEF9" },
+  { key: "waiting", label: "ממתינה לתשובה", color: "#B06A12", bg: "#F8EEDC" },
+  { key: "in_progress", label: "בטיפול", color: "#3F6F87", bg: "#E8F0F3" },
+  { key: "quote_sent", label: "נשלחה הצעת מחיר", color: "#625482", bg: "#EEEAF3" },
+  { key: "closed_won", label: "נסגרה בהצלחה", color: "#2E7D4C", bg: "#E2F0E7" },
+  { key: "irrelevant", label: "לא רלוונטית", color: "#6E7480", bg: "#EFF0F2" },
 ];
 
 export const LEAD_SOURCES: { key: LeadSource; label: string }[] = [
@@ -106,15 +106,15 @@ export const LEAD_SOURCES: { key: LeadSource; label: string }[] = [
 ];
 
 export const CUSTOMER_STATUSES: { key: CustomerStatus; label: string; color: string; bg: string }[] = [
-  { key: "potential", label: "מתעניין", color: "#F59E0B", bg: "#FEF3C7" },
-  { key: "active", label: "פעיל", color: "#16A34A", bg: "#DCFCE7" },
-  { key: "inactive", label: "לא פעיל", color: "#64748B", bg: "#F1F5F9" },
+  { key: "potential", label: "מתעניין", color: "#B06A12", bg: "#F8EEDC" },
+  { key: "active", label: "פעיל", color: "#2E7D4C", bg: "#E2F0E7" },
+  { key: "inactive", label: "לא פעיל", color: "#6E7480", bg: "#EFF0F2" },
 ];
 
 export const PRIORITIES: { key: Priority; label: string; color: string; bg: string }[] = [
-  { key: "high", label: "גבוהה", color: "#DC2626", bg: "#FEE2E2" },
-  { key: "medium", label: "בינונית", color: "#F59E0B", bg: "#FEF3C7" },
-  { key: "low", label: "נמוכה", color: "#16A34A", bg: "#DCFCE7" },
+  { key: "high", label: "גבוהה", color: "#BE3B32", bg: "#F8E6E3" },
+  { key: "medium", label: "בינונית", color: "#B06A12", bg: "#F8EEDC" },
+  { key: "low", label: "נמוכה", color: "#2E7D4C", bg: "#E2F0E7" },
 ];
 
 export const leadStatusLabel = (s: LeadStatus) => LEAD_STATUSES.find((x) => x.key === s)!;

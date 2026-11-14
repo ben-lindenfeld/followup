@@ -61,7 +61,7 @@ export default function TaskModal({ open, onClose, onSaved, task, presetCustomer
       onSaved();
     } catch (err) {
       console.error(err);
-      toast("שמירה נכשלה", "error");
+      toast("לא הצלחנו לשמור. נסה שוב בעוד רגע.", "error");
     } finally {
       setSaving(false);
     }
@@ -75,7 +75,7 @@ export default function TaskModal({ open, onClose, onSaved, task, presetCustomer
         </Field>
         <Field label="לקוח קשור">
           <select className="input" value={f.customer_id} onChange={(e) => set("customer_id", e.target.value)}>
-            <option value="">— ללא —</option>
+            <option value="">- ללא -</option>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.full_name}</option>)}
           </select>
         </Field>

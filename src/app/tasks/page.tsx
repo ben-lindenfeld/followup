@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, CheckSquare, Trash2, Pencil, AlertTriangle } from "lucide-react";
-import { PageHeader, Spinner, Badge, SampleBadge, EmptyState } from "@/components/ui";
+import { PageSkeleton, PageHeader, Spinner, Badge, SampleBadge, EmptyState, Modal } from "@/components/ui";
 import { useToast } from "@/components/Toast";
 import TaskModal from "@/components/TaskModal";
 import { Task, formatDateTime, priorityLabel } from "@/lib/types";
@@ -29,12 +29,14 @@ function groupOf(t: Task): GroupKey {
 
 export default function TasksPage() {
   const toast = useToast();
+  const [toDelete,setToDelete]=useState<Task|null>(null);
+  const [busyId,setBusyId]=useState<string|null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState<{ open: boolean; task: Task | null }>({ open: false, task: null });
 
   const load = useCallback(async () => {
-    try { setTasks(await fetchTasks()); } catch (e) { console.error(e); toast("טעינה נכשלה", "error"); }
+    try { setTasks(await fetchTasks()); } catch (e) { console.error(e); toast("לא הצלחנו לטעון את הנתונים. רענן את העמוד ונסה שוב.", "error"); }
     setLoading(false);
   }, [toast]);
 
@@ -47,7 +49,7 @@ export default function TasksPage() {
     return map;
   }, [tasks]);
 
-  if (loading) return <Spinner />;
+  if (loading) return <PageSkeleton />;
 
   return (
     <div className="anim-fade-up">
@@ -73,11 +75,11 @@ export default function TasksPage() {
                   {items.map((t) => {
                     const p = priorityLabel(t.priority);
                     return (
-                      <div key={t.id} className={`flex items-center gap-3 px-4 py-3 ${g.key === "overdue" ? "bg-danger-soft/30" : ""}`}>
+                      <div key={t.id} className={`flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 ${g.key === "overdue" ? "bg-danger-soft/30" : ""}`}>
                         <button
-                          className="w-5 h-5 rounded-md border-2 border-slate-300 hover:border-success hover:bg-success-soft shrink-0 transition-colors"
+                          className="w-5 h-5 rounded-md border-2 border-[#C9CCD2] hover:border-success hover:bg-success-soft shrink-0 transition-colors"
                           title="סמן כהושלם"
-                          onClick={async () => { await completeTask(t.id, t.title, t.customer_id); toast("המשימה הושלמה"); load(); }}
+                          disabled={busyId===t.id} onClick={async () => {setBusyId(t.id);try{await completeTask(t.id, t.title, t.customer_id); toast("המשימה הושלמה"); await load();}catch{toast("המשימה לא סומנה. נסה שוב.","error");}finally{setBusyId(null);} }}
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -91,8 +93,8 @@ export default function TasksPage() {
                           </div>
                         </div>
                         <Badge label={p.label} color={p.color} bg={p.bg} />
-                        <button className="p-1.5 rounded-lg hover:bg-slate-100 text-muted" onClick={() => setModal({ open: true, task: t })}><Pencil size={15} /></button>
-                        <button className="p-1.5 rounded-lg hover:bg-danger-soft text-muted hover:text-danger" onClick={async () => { await deleteTask(t.id); load(); }}><Trash2 size={15} /></button>
+                        <button className="p-1.5 rounded-lg hover:bg-[#EEEFEC] text-muted" onClick={() => setModal({ open: true, task: t })}><Pencil size={15} /></button>
+                        <button className="p-1.5 rounded-lg hover:bg-danger-soft text-muted hover:text-danger" title="מחיקת משימה" onClick={() => setToDelete(t)}><Trash2 size={15} /></button>
                       </div>
                     );
                   })}
@@ -103,6 +105,7 @@ export default function TasksPage() {
         </div>
       )}
 
+      <Modal open={!!toDelete} title="מחיקת משימה" onClose={()=>setToDelete(null)}><p className="text-sm mb-4">למחוק את המשימה <b>{toDelete?.title}</b>? אי אפשר לבטל.</p><div className="flex gap-2"><button className="btn btn-danger-soft" disabled={!!busyId} onClick={async()=>{if(!toDelete)return;setBusyId(toDelete.id);try{await deleteTask(toDelete.id);setToDelete(null);toast("המשימה נמחקה");await load();}catch{toast("המחיקה לא הצליחה. נסה שוב.","error");}finally{setBusyId(null);}}}>{busyId?"מוחק...":"מחק משימה"}</button><button className="btn btn-ghost" onClick={()=>setToDelete(null)}>ביטול</button></div></Modal>
       <TaskModal open={modal.open} task={modal.task} onClose={() => setModal({ open: false, task: null })} onSaved={() => { setModal({ open: false, task: null }); load(); }} />
     </div>
   );

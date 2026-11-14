@@ -76,7 +76,7 @@ export default function CustomerModal({ open, onClose, onSaved, customer }: Prop
       onSaved(saved);
     } catch (err) {
       console.error(err);
-      toast("שמירה נכשלה, נסה שוב", "error");
+      toast("לא הצלחנו לשמור. הפרטים נשארו בטופס, נסה שוב.", "error");
     } finally {
       setSaving(false);
     }
@@ -85,7 +85,7 @@ export default function CustomerModal({ open, onClose, onSaved, customer }: Prop
   return (
     <Modal open={open} onClose={onClose} title={editing ? "עריכת לקוח" : "הוספת לקוח חדש"}>
       {dup && (
-        <div className="mb-4 p-3 rounded-xl bg-warning-soft text-sm">
+        <div className="mb-4 p-3 rounded-lg bg-warning-soft text-sm">
           לקוח בשם <b>{dup.full_name}</b> כבר קיים במערכת.{" "}
           <button className="underline font-medium" onClick={() => { setDup(null); save(true); }}>צור בכל זאת</button>
         </div>
@@ -116,9 +116,9 @@ export default function CustomerModal({ open, onClose, onSaved, customer }: Prop
         </Field>
       </div>
       {!editing && (
-        <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-border">
+        <div className="mt-4 p-4 rounded-lg bg-bg border border-border">
           <label className="flex items-center gap-2 text-sm font-medium mb-3">
-            <input type="checkbox" checked={f.create_lead} onChange={(e) => set("create_lead", e.target.checked)} className="w-4 h-4 accent-[#4F46E5]" />
+            <input type="checkbox" checked={f.create_lead} onChange={(e) => set("create_lead", e.target.checked)} className="w-4 h-4 accent-[#3D4FC4]" />
             צור גם פנייה חדשה עבור לקוח זה
           </label>
           {f.create_lead && (
