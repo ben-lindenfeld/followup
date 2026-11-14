@@ -95,7 +95,7 @@ export const LEAD_STATUSES: { key: LeadStatus; label: string; color: string; bg:
   { key: "in_progress", label: "בטיפול", color: "#3F6F87", bg: "#E8F0F3" },
   { key: "quote_sent", label: "נשלחה הצעת מחיר", color: "#625482", bg: "#EEEAF3" },
   { key: "closed_won", label: "נסגרה בהצלחה", color: "#2E7D4C", bg: "#E2F0E7" },
-  { key: "irrelevant", label: "לא רלוונטית", color: "#6E7480", bg: "#EFF0F2" },
+  { key: "irrelevant", label: "לא רלוונטית", color: "#505662", bg: "#EFF0F2" },
 ];
 
 export const LEAD_SOURCES: { key: LeadSource; label: string }[] = [
@@ -108,7 +108,7 @@ export const LEAD_SOURCES: { key: LeadSource; label: string }[] = [
 export const CUSTOMER_STATUSES: { key: CustomerStatus; label: string; color: string; bg: string }[] = [
   { key: "potential", label: "מתעניין", color: "#B06A12", bg: "#F8EEDC" },
   { key: "active", label: "פעיל", color: "#2E7D4C", bg: "#E2F0E7" },
-  { key: "inactive", label: "לא פעיל", color: "#6E7480", bg: "#EFF0F2" },
+  { key: "inactive", label: "לא פעיל", color: "#505662", bg: "#EFF0F2" },
 ];
 
 export const PRIORITIES: { key: Priority; label: string; color: string; bg: string }[] = [

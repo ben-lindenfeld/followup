@@ -44,7 +44,7 @@ export function Badge({ label, color, bg }: { label: string; color: string; bg: 
 }
 
 export function SampleBadge() {
-  return <span className="badge" style={{ color: "#6E7480", background: "#EFF0F2", borderStyle: "dashed", borderColor: "#C9CCD2" }}>דוגמה</span>;
+  return <span className="badge" style={{ color: "#505662", background: "#EFF0F2", borderStyle: "dashed", borderColor: "#C9CCD2" }}>דוגמה</span>;
 }
 
 export function Spinner({ text }: { text?: string }) {
@@ -79,7 +79,7 @@ export function EmptyState({ icon: Icon, title, sub, action }: { icon: LucideIco
   return (
     <div className="flex flex-col items-center justify-center py-12 gap-1.5 text-center px-4">
       <div className="w-10 h-10 rounded-lg bg-[#F0F1EE] border border-border flex items-center justify-center text-muted mb-1.5"><Icon size={18} /></div>
-      <div className="font-medium text-[15px]">{title}</div>
+      <div className="font-medium text-[16.5px]">{title}</div>
       {sub && <div className="text-sm text-muted max-w-xs leading-relaxed">{sub}</div>}
       {action && <div className="mt-3">{action}</div>}
     </div>
@@ -113,7 +113,7 @@ export function PageHeader({ title, sub, children }: { title: string; sub?: stri
     <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
       <div>
         <h1 className="text-lg font-bold">{title}</h1>
-        {sub && <div className="text-[13px] text-muted mt-0.5">{sub}</div>}
+        {sub && <div className="text-[14.5px] text-muted mt-0.5">{sub}</div>}
       </div>
       {children && <div className="page-actions">{children}</div>}
     </div>

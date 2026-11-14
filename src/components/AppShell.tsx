@@ -68,15 +68,15 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </nav>
         <div className="p-3 border-t border-border">
           <Link href="/settings" className="flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-[#F0F1EE] transition-colors">
-            <div className="w-8 h-8 rounded-full bg-primary-soft text-primary flex items-center justify-center font-semibold text-[13px]">
+            <div className="w-8 h-8 rounded-full bg-primary-soft text-primary flex items-center justify-center font-semibold text-[14.5px]">
               {(profile?.business_name || profile?.owner_name || "ע")[0]}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[13px] font-medium truncate">{profile?.business_name || "העסק שלי"}</div>
+              <div className="text-[14.5px] font-medium truncate">{profile?.business_name || "העסק שלי"}</div>
               <div className="text-xs text-muted truncate">{profile?.owner_name}</div>
             </div>
           </Link>
-          <button onClick={signOut} className="mt-0.5 w-full flex items-center gap-2.5 px-2 py-2 rounded-lg text-[13px] text-muted hover:bg-[#F0F1EE] hover:text-danger transition-colors">
+          <button onClick={signOut} className="mt-0.5 w-full flex items-center gap-2.5 px-2 py-2 rounded-lg text-[14.5px] text-muted hover:bg-[#F0F1EE] hover:text-danger transition-colors">
             <LogOut size={15} /> התנתקות
           </button>
         </div>
@@ -87,7 +87,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         {NAV.map((n) => {
           const active = pathname === n.href;
           return (
-            <Link key={n.href} href={n.href} className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg text-[10px] min-w-0 flex-1 transition-colors ${active ? "text-primary font-medium" : "text-muted"}`}>
+            <Link key={n.href} href={n.href} className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg text-[12px] leading-tight min-w-0 flex-1 transition-colors ${active ? "text-primary font-medium" : "text-muted"}`}>
               <n.icon size={19} strokeWidth={active ? 2.1 : 1.8} />
               {n.label}
             </Link>
@@ -99,7 +99,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <div className="md:mr-60 pb-24 md:pb-8">
         <header className="sticky top-0 z-30 bg-bg/85 backdrop-blur border-b border-border px-4 md:px-8 py-2.5 flex items-center justify-between gap-2">
           <div className="md:hidden"><Logo size={22} wordmark={false} /></div>
-          <div className="hidden md:block font-medium text-muted text-[13px]">{title}</div>
+          <div className="hidden md:block font-medium text-muted text-[14.5px]">{title}</div>
           <div className="flex items-center gap-1">
             <button onClick={() => setAiOpen(true)} className="btn btn-ghost !p-2 relative" title="AI Assistant">
               <Sparkles size={18} />
@@ -107,7 +107,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <div className="relative">
               <button onClick={() => { setNotifOpen(!notifOpen); if (!notifOpen) loadNotifs(); }} className="btn btn-ghost !p-2 relative" title="התראות">
                 <Bell size={18} />
-                {unread > 0 && <span className="absolute top-1 left-1 w-4 h-4 rounded-full bg-danger text-white text-[10px] flex items-center justify-center">{unread > 9 ? "9+" : unread}</span>}
+                {unread > 0 && <span className="absolute top-1 left-1 w-4 h-4 rounded-full bg-danger text-white text-[13px] flex items-center justify-center">{unread > 9 ? "9+" : unread}</span>}
               </button>
               {notifOpen && (
                 <>
@@ -126,12 +126,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
                       {notifs.map((n) => (
                         <button key={n.id} onClick={async () => { if (!n.read) { await markNotificationRead(n.id); loadNotifs(); } }} className={`w-full text-right px-4 py-3 border-b border-border last:border-0 hover:bg-[#F6F6F4] transition-colors ${n.read ? "opacity-60" : ""}`}>
                           <div className="flex items-center gap-2">
-                            <span className="text-[13px]">{NOTIF_ICON[n.type] ?? "🔵"}</span>
+                            <span className="text-[14.5px]">{NOTIF_ICON[n.type] ?? "🔵"}</span>
                             <span className="text-sm font-medium flex-1">{n.title}</span>
                             {!n.read && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
                           </div>
                           {n.body && <div className="text-xs text-muted mt-0.5 pr-6">{n.body}</div>}
-                          <div className="text-[11px] text-faint mt-0.5 pr-6">{timeAgo(n.created_at)}</div>
+                          <div className="text-[13.5px] text-faint mt-0.5 pr-6">{timeAgo(n.created_at)}</div>
                         </button>
                       ))}
                     </div>

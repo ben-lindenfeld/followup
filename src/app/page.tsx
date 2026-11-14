@@ -60,7 +60,7 @@ export default function Dashboard() {
     <div>
       {/* Work header */}
       <div className="mb-5">
-        <div className="text-[13px] text-muted">{dateLine}</div>
+        <div className="text-[14.5px] text-muted">{dateLine}</div>
         <h1 className="text-[22px] font-bold mt-0.5">{profile?.owner_name ? `שלום, ${profile.owner_name}` : "שלום"}</h1>
       </div>
 
@@ -69,7 +69,7 @@ export default function Dashboard() {
         {summary.map((s, i) => (
           <Link key={s.label} href={s.href} className={`flex items-baseline gap-2 px-4 py-2.5 hover:bg-[#F6F6F4] rounded-lg transition-colors ${i > 0 ? "border-r border-border" : ""}`}>
             <span className="text-lg font-bold leading-none">{s.n}</span>
-            <span className="text-[13px] text-muted">{s.label}</span>
+            <span className="text-[14.5px] text-muted">{s.label}</span>
           </Link>
         ))}
       </div>
@@ -79,17 +79,17 @@ export default function Dashboard() {
           {/* Today's work */}
           <section className="card overflow-hidden">
             <div className="px-5 py-3 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-[15px]">מה דורש טיפול היום</h2>
+              <h2 className="font-semibold text-[16.5px]">מה דורש טיפול היום</h2>
               <Link href="/tasks" className="text-xs text-primary font-medium hover:underline">כל המשימות</Link>
             </div>
-            {actions.length===0?<div className="p-8 text-sm text-muted text-center">אין משימות או חזרות פתוחות להיום. אפשר להוסיף משימה חדשה בלוח המשימות.</div>:<><div className="hidden sm:grid grid-cols-[1fr_1.4fr_.8fr_.7fr_auto] gap-3 px-5 py-2 text-xs text-muted bg-bg border-b border-border"><span>לקוח</span><span>מה צריך לעשות</span><span>מועד</span><span>סטטוס</span><span>המשך</span></div>{actions.map(a=><div key={a.key} className="px-4 sm:px-5 py-3 border-b border-border last:border-0 grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_.8fr_.7fr_auto] items-center gap-2 sm:gap-3 hover:bg-[#FAFAF8]"><div className="text-sm font-medium flex items-center gap-1 flex-wrap">{a.customer?<Link className="hover:text-primary" href={`/customer?id=${a.customer.id}`}>{a.customer.full_name}</Link>:<span className="text-muted">משימה כללית</span>}{a.customer?.is_sample&&<SampleBadge/>}</div><div className="text-sm">{a.title}</div><div className="text-xs text-muted">{a.task?formatDate(a.task.due_at)+" · ":""}{a.when}</div><div><Badge label={a.status} color={a.late?"#BE3B32":"#6E7480"} bg={a.late?"#F8E6E3":"#EFF0F2"}/></div><div className="flex gap-1 items-center">{a.task?<button title="סמן כהושלם" disabled={busyId===a.key} className="btn btn-success-soft !px-2 !py-1.5 text-xs" onClick={async()=>{setBusyId(a.key);try{await completeTask(a.task!.id,a.task!.title,a.task!.customer_id);toast("המשימה הושלמה");await load();}catch{toast("המשימה לא סומנה. נסה שוב.","error");}finally{setBusyId(null);}}}>{busyId===a.key?"שומר...":<><Check size={13}/>טופל</>}</button>:a.customer&&<Link className="btn btn-outline !px-2 !py-1.5 text-xs" href={`/customer?id=${a.customer.id}`}>פתיחה</Link>}{a.customer?.phone&&<a className="btn btn-ghost !p-2" href={`tel:${a.customer.phone}`} title="התקשר ללקוח"><Phone size={13}/></a>}</div></div>)}</>}
+            {actions.length===0?<div className="p-8 text-sm text-muted text-center">אין משימות או חזרות פתוחות להיום. אפשר להוסיף משימה חדשה בלוח המשימות.</div>:<><div className="hidden sm:grid grid-cols-[1fr_1.4fr_.8fr_.7fr_auto] gap-3 px-5 py-2 text-xs text-muted bg-bg border-b border-border"><span>לקוח</span><span>מה צריך לעשות</span><span>מועד</span><span>סטטוס</span><span>המשך</span></div>{actions.map(a=><div key={a.key} className="px-4 sm:px-5 py-3 border-b border-border last:border-0 grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_.8fr_.7fr_auto] items-center gap-2 sm:gap-3 hover:bg-[#FAFAF8]"><div className="text-sm font-medium flex items-center gap-1 flex-wrap">{a.customer?<Link className="hover:text-primary" href={`/customer?id=${a.customer.id}`}>{a.customer.full_name}</Link>:<span className="text-muted">משימה כללית</span>}{a.customer?.is_sample&&<SampleBadge/>}</div><div className="text-sm">{a.title}</div><div className="text-xs text-muted">{a.task?formatDate(a.task.due_at)+" · ":""}{a.when}</div><div><Badge label={a.status} color={a.late?"#BE3B32":"#505662"} bg={a.late?"#F8E6E3":"#EFF0F2"}/></div><div className="flex gap-1 items-center">{a.task?<button title="סמן כהושלם" disabled={busyId===a.key} className="btn btn-success-soft !px-2 !py-1.5 text-xs" onClick={async()=>{setBusyId(a.key);try{await completeTask(a.task!.id,a.task!.title,a.task!.customer_id);toast("המשימה הושלמה");await load();}catch{toast("המשימה לא סומנה. נסה שוב.","error");}finally{setBusyId(null);}}}>{busyId===a.key?"שומר...":<><Check size={13}/>טופל</>}</button>:a.customer&&<Link className="btn btn-outline !px-2 !py-1.5 text-xs" href={`/customer?id=${a.customer.id}`}>פתיחה</Link>}{a.customer?.phone&&<a className="btn btn-ghost !p-2" href={`tel:${a.customer.phone}`} title="התקשר ללקוח"><Phone size={13}/></a>}</div></div>)}</>}
 
           </section>
 
           {/* Recent leads */}
           <section className="card overflow-hidden">
             <div className="px-5 py-3 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-[15px]">פניות אחרונות</h2>
+              <h2 className="font-semibold text-[16.5px]">פניות אחרונות</h2>
               <Link href="/leads" className="text-xs text-primary font-medium hover:underline">כל הפניות</Link>
             </div>
             {leads.length === 0 && <div className="p-8 text-sm text-muted text-center">עוד אין פניות. פנייה חדשה שתוסיף תופיע כאן.</div>}
@@ -109,14 +109,14 @@ export default function Dashboard() {
         <div className="flex flex-col gap-5">
           {/* Activity */}
           <section className="card p-5">
-            <h2 className="font-semibold text-[15px] mb-3">פעילות אחרונה</h2>
+            <h2 className="font-semibold text-[16.5px] mb-3">פעילות אחרונה</h2>
             {activity.length === 0 && <div className="text-sm text-muted">עוד לא בוצעו פעולות במערכת.</div>}
             <div className="flex flex-col gap-3">
               {activity.slice(0, 8).map((a) => (
                 <div key={a.id} className="flex gap-2.5 text-sm">
                   <div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-2 shrink-0" />
                   <div className="min-w-0">
-                    <div className="leading-snug text-[13.5px]">{a.description}</div>
+                    <div className="leading-snug text-[15px]">{a.description}</div>
                     <div className="text-xs text-faint">{timeAgo(a.created_at)}</div>
                   </div>
                 </div>
@@ -126,12 +126,12 @@ export default function Dashboard() {
 
           {/* AI teaser - honest disconnected state */}
           <button onClick={() => setAiOpen(true)} className="card p-4 text-right hover:border-primary/40 transition-colors">
-            <div className="flex items-center gap-2 font-semibold text-[14px] mb-1">
+            <div className="flex items-center gap-2 font-semibold text-[15.5px] mb-1">
               <Sparkles size={15} className="text-primary" /> עוזר AI
               <ArrowLeft size={14} className="mr-auto text-faint" />
             </div>
             <p className="text-xs text-muted leading-relaxed">ניסוח הודעות מעקב וסיכומי קשר בלחיצה.</p>
-            <div className="text-[11px] text-warning mt-1.5">היכולת עדיין לא מחוברת</div>
+            <div className="text-[13.5px] text-warning mt-1.5">היכולת עדיין לא מחוברת</div>
           </button>
         </div>
       </div>

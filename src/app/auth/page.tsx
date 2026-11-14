@@ -51,12 +51,12 @@ export default function AuthPage() {
         <Logo size={30} onDark />
         <div>
           <h1 className="text-2xl font-bold leading-snug mb-3">המעקב אחרי הלקוחות שלך,<br />סוף סוף במקום אחד.</h1>
-          <p className="text-[15px] text-white/70 leading-relaxed mb-8">
+          <p className="text-[16.5px] text-white/70 leading-relaxed mb-8">
             FollowUp עוזר לבעלי עסקים קטנים לזכור למי לחזור, מתי, ובאיזה שלב כל פנייה עומדת.
           </p>
           <ul className="flex flex-col gap-3">
             {POINTS.map((p) => (
-              <li key={p} className="flex items-center gap-2.5 text-[14px] text-white/85">
+              <li key={p} className="flex items-center gap-2.5 text-[15.5px] text-white/85">
                 <span className="w-5 h-5 rounded-full bg-white/12 flex items-center justify-center shrink-0"><Check size={12} /></span>
                 {p}
               </li>
@@ -90,7 +90,7 @@ export default function AuthPage() {
               <Field label="סיסמה" required>
                 <input className="input" dir="ltr" type="password" value={f.password} onChange={(e) => set("password", e.target.value)} placeholder="••••••••" onKeyDown={(e) => e.key === "Enter" && submit()} />
               </Field>
-              {error && <div className="text-danger text-[13px] bg-danger-soft border border-danger/20 rounded-lg px-3 py-2.5 leading-relaxed">{error}</div>}
+              {error && <div className="text-danger text-[14.5px] bg-danger-soft border border-danger/20 rounded-lg px-3 py-2.5 leading-relaxed">{error}</div>}
               <button className="btn btn-primary w-full !py-2.5" onClick={submit} disabled={busy}>
                 {busy && <Loader2 size={15} className="animate-spin" />}
                 {mode === "login" ? "התחבר" : "צור חשבון"}

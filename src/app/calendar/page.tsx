@@ -73,7 +73,7 @@ export default function CalendarPage() {
               <button
                 key={t.id}
                 onClick={(e) => { e.stopPropagation(); setModal({ open: true, task: t }); }}
-                className={`text-[11px] text-right rounded-lg px-1.5 py-1 leading-tight truncate ${t.done ? "line-through opacity-50" : ""}`}
+                className={`text-[13.5px] text-right rounded-lg px-1.5 py-1 leading-tight truncate ${t.done ? "line-through opacity-50" : ""}`}
                 style={{ background: p.bg, color: p.color }}
                 title={t.title}
               >
@@ -81,7 +81,7 @@ export default function CalendarPage() {
               </button>
             );
           })}
-          {view === "month" && dayTasks.length > 3 && <div className="text-[10px] text-muted px-1">+{dayTasks.length - 3} נוספות</div>}
+          {view === "month" && dayTasks.length > 3 && <div className="text-[13px] text-muted px-1">+{dayTasks.length - 3} נוספות</div>}
         </div>
       </div>
     );

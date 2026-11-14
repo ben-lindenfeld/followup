@@ -137,8 +137,8 @@ export default function LeadsPage() {
                           </div>
                           <div className="text-xs text-muted mt-1">{l.customers?.full_name ?? "ללא שיוך"}</div>
                           <div className="flex items-center justify-between mt-2">
-                            <span className="text-[11px] text-muted">{leadSourceLabel(l.source)}</span>
-                            {l.next_follow_up && <span className="text-[11px] text-warning font-medium">{formatDate(l.next_follow_up)}</span>}
+                            <span className="text-[13.5px] text-muted">{leadSourceLabel(l.source)}</span>
+                            {l.next_follow_up && <span className="text-[13.5px] text-warning font-medium">{formatDate(l.next_follow_up)}</span>}
                           </div>
                         </div>
                       </div>
